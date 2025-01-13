@@ -38,7 +38,8 @@ class MainActivity : ComponentActivity() {
 fun MainScreen() {
     Lab01Theme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            var username by remember { mutableStateOf("") }
+            var tempName by remember { mutableStateOf("") }
+            var actName by remember { mutableStateOf("") }
             var showGreeting by remember { mutableStateOf(false) }
 
             Column(
@@ -48,15 +49,16 @@ fun MainScreen() {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                UserInput(
-                    name = name,
-                    onNameChange = { name = it }
+                NameInput(
+                    name = tempName,
+                    onNameChange = { tempName = it }
                 )
 
                 Button(
                     onClick = {
-                        if (username.isNotBlank()) {
-                            showGreeting = false
+                        if (tempName.isNotBlank()) {
+                            actName = tempName
+                            showGreeting = true
                         }
                     },
                     modifier = Modifier
@@ -67,8 +69,8 @@ fun MainScreen() {
                 }
 
                 if (showGreeting) {
-                    Greeeting(
-                        name = username,
+                    Greeting(
+                        name = actName,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp)
@@ -81,24 +83,24 @@ fun MainScreen() {
 }
 
 @Composable
-fun UserInput(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
+fun NameInput(name: String, onNameChange: (String) -> Unit, modifier: Modifier = Modifier) {
     TextField(
         value = name,
         onValueChange = { onNameChange(it) },
         label = { Text("Enter your Name") },
         modifier = modifier
             .fillMaxWidth()
-            .testTag("UserInput")
+            .testTag("nameInput")
     )
 }
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $username!, Welcome to InF2007!",
+        text = "Hello $name!, Welcome to InF2007!",
         modifier = Modifier
             .fillMaxWidth()
-            .testTag("greeting")
+            .testTag("greetingMsg")
     )
 }
 
